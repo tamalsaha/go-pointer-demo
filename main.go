@@ -23,12 +23,17 @@ type ObjectReference struct {
 // This is the worst (least expected version).
 // func (ref *ObjectReference) WithNamespace(fallback string) ObjectReference {
 
-func (ref *ObjectReference) WithNamespace(fallback string) ObjectReference {
+func (ref ObjectReference) WithNamespace(fallback string) ObjectReference {
 	if ref.Namespace != "" {
-		return *ref
+		return ref
 	}
 	ref.Namespace = fallback
-	return *ref
+	return ref
+}
+
+func (ref *ObjectReference) WithName(name string) *ObjectReference {
+	ref.Name = name
+	return ref
 }
 
 func main() {
@@ -37,8 +42,9 @@ func main() {
 		Name:      "r1",
 	}
 	b1 := r1.WithNamespace("b1")
+	b1.WithName("n1")
 	fmt.Println(r1.Namespace)
-	fmt.Println(b1.Namespace)
+	fmt.Println(b1.Namespace, b1.Name)
 	r1.Namespace = "r2"
 	fmt.Println(b1.Namespace)
 }
